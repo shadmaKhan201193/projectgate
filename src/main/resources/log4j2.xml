@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="GatewayService"	packages="">
+
+	<Appenders>
+		<!-- <RollingRandomAccessFile
+			name="GatewayServiceFile" fileName="../logs/gatewayservice.log"
+			filePattern="../logs/$${date:yyyy-MM}/gatewayservice-%d{yyyy-MM-dd-HH}-%i.log.gz">
+			<PatternLayout pattern="%d %p %c{1.} [%t] %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="3"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="25 MB" />
+			</Policies>
+		</RollingRandomAccessFile> -->
+
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %p %c{1.} [%t] %m%n" />
+		</Console>
+
+	</Appenders>
+
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
+</Configuration>

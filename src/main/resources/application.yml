@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: GATEWAY-SERVICE
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+      routes:
+      - id: masterService
+        uri: lb://MASTER-SERVICE
+        predicates:
+        - Path=/masterService/**
+        filters:
+        - RewritePath=/masterService(?<segment>/?.*), $\{segment}
+      - id: customerService
+        uri: lb://CUSTOMER-SERVICE
+        predicates:
+        - Path=/customerService/**
+        filters:
+        - RewritePath=/customerService(?<segment>/?.*), $\{segment}
+      - id: loanService
+        uri: lb://LOAN-SERVICE
+        predicates:
+        - Path=/loanService/**
+        filters:
+        - RewritePath=/loanService(?<segment>/?.*), $\{segment}
+      - id: loginService
+        uri: lb://LOGIN-SERVICE
+        predicates:
+        - Path=/loginService/**
+        filters:
+        - RewritePath=/loginService(?<segment>/?.*), $\{segment}
+
+server:
+  port: 8988
+ 
+eureka:
+  instance:
+    #hostname: localhost
+    hostname: 172.21.0.65
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 20
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://172.21.0.65:8761/eureka
+      #defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: INFO
+          
+management:
+  endpoint:
+    health:
+      show-details: always
+    info:
+      enabled: true
+  endpoints:
+    web:
+#      base-path: "/"
+      exposure:
+        include: "*"
+#        include: health, info, configprops, metrics, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
